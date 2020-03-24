@@ -9,20 +9,21 @@ public class RaceTrack extends Obstacle {
         super();
         this.name = "Race Track";
         this.length = length;
+        System.out.printf("We have a new %s (%d meters length).%n", this.getName(), this.getLength());
     }
 
     @Override
     public int getLength() {
-        return this.length;
+        return length;
     }
 
     @Override
     public float getHeight() {
-        return this.height;
+        return height;
     }
 
     @Override
     String getName() {
-        return this.name;
+        return name;
     }
 }

@@ -9,20 +9,21 @@ public class Wall extends Obstacle {
         super();
         this.name = "Wall";
         this.height = height;
+        System.out.printf("We have a new %s (%.1f meters height).%n", this.getName(), this.getHeight());
     }
 
     @Override
     public int getLength() {
-        return this.length;
+        return length;
     }
 
     @Override
     public float getHeight() {
-        return this.height;
+        return height;
     }
 
     @Override
     String getName() {
-        return this.name;
+        return name;
     }
 }

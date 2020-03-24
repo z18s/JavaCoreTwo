@@ -3,26 +3,20 @@ package lesson_1;
 public class HomeworkOne {
     public static void main(String[] args) {
 
-        Human human = new Human();
-        Cat cat = new Cat();
-        Robot robot = new Robot();
+        Human humanThomas = new Human("Thomas");
+        Cat catOliver = new Cat("Oliver");
+        Robot robotAsh = new Robot("Ash");
 
         RaceTrack raceTrack = new RaceTrack(400);
         Wall wall = new Wall(1.0f);
 
-        System.out.printf("We have a new %s (%d meters length).%n", raceTrack.getName(), raceTrack.getLength());
-        System.out.printf("We have a new %s (%.1f meters height).%n", wall.getName(), wall.getHeight());
+        Trial trial = new Trial();
 
-        CanRunAndJump[] competitors = {human, cat, robot};
-        Obstacle[] obstacles = {raceTrack, wall};
+        trial.addCompetitors(humanThomas, catOliver, robotAsh);
+        trial.addObstacles(raceTrack, wall);
 
-        System.out.println("----------");
+        trial.start();
 
-        for (CanRunAndJump competitor : competitors) {
-            System.out.println();
-            for (Obstacle obstacle : obstacles) {
-                competitor.passObstacle(obstacle);
-            }
-        }
+        trial.result();
     }
 }
