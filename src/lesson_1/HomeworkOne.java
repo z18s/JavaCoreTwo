@@ -12,8 +12,8 @@ public class HomeworkOne {
 
         Trial trial = new Trial();
 
-        trial.addCompetitors(humanThomas, catOliver, robotAsh);
-        trial.addObstacles(raceTrack, wall);
+        trial.setCompetitors(humanThomas, catOliver, robotAsh);
+        trial.setObstacles(raceTrack, wall);
 
         trial.start();
 

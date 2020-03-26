@@ -9,8 +9,8 @@ public class Cat implements CanRunAndJump {
     private boolean isCompetitor;
 
     public Cat() {
-        this.runMax = 200;
-        this.jumpMax = 1.5f;
+        this.runMax = 200 + (int) (Math.random() * 100 + 1);
+        this.jumpMax = 1.0f + ((int) (Math.random() * 5) + 1) / 10.0f;
         this.isCompetitor = true;
     }
 
@@ -49,5 +49,4 @@ public class Cat implements CanRunAndJump {
     public boolean checkCompetition() {
         return isCompetitor;
     }
-
 }

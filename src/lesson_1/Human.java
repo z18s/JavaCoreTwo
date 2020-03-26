@@ -9,8 +9,8 @@ public class Human implements CanRunAndJump {
     private boolean isCompetitor;
 
     public Human() {
-        this.runMax = 500;
-        this.jumpMax = 2.0f;
+        this.runMax = 500 + (int) (Math.random() * 200 + 1);
+        this.jumpMax = 1.5f + ((int) (Math.random() * 5) + 1) / 10.0f;
         this.isCompetitor = true;
     }
 

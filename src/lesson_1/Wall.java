@@ -23,7 +23,7 @@ public class Wall extends Obstacle {
     }
 
     @Override
-    String getName() {
+    public String getName() {
         return name;
     }
 }

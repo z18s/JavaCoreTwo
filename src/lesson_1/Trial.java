@@ -6,7 +6,7 @@ public class Trial {
     Obstacle[] obstacles;
 
 
-    public void addCompetitors(CanRunAndJump... competitors) {
+    public void setCompetitors(CanRunAndJump... competitors) {
         int i = 0;
         for (CanRunAndJump competitor : competitors) {
             i++;
@@ -19,7 +19,7 @@ public class Trial {
         }
     }
 
-    public void addObstacles(Obstacle... obstacles) {
+    public void setObstacles(Obstacle... obstacles) {
         int i = 0;
         for (Obstacle obstacle : obstacles) {
             i++;
