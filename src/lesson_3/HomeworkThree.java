@@ -14,7 +14,7 @@ public class HomeworkThree {
 
         System.out.println("Original array:\t" + Arrays.toString(arr));
 
-        HashMap<String, Integer> hm = new HashMap<>();
+        LinkedHashMap<String, Integer> hm = new LinkedHashMap<>();
         for (String str : arr) {
             int i = 1;
             for (String key : hm.keySet()) {
@@ -23,6 +23,8 @@ public class HomeworkThree {
                 }
             }
             hm.put(str, i);
+
+//            hm.merge(str, 1, Integer::sum);
         }
 
         System.out.println("Unique ones:\t" + hm.keySet());
@@ -31,7 +33,7 @@ public class HomeworkThree {
 
         // Phone Book v.1
 
-        PhoneBookHM phoneBook1 = new PhoneBookHM();
+        PhoneBookMap phoneBook1 = new PhoneBookMap();
         phoneBook1.add("Smith", "555-44-60");
         phoneBook1.add("Brown", "554-35-53");
         phoneBook1.add("Jones", "552-25-63");
