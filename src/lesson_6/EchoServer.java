@@ -7,10 +7,11 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class EchoServer {
+
     private static final int SERVER_PORT = 8189 ;
 
     public static void main(String[] args) {
-        Socket socket = null ;
+        Socket socket;
         try (ServerSocket serverSocket = new ServerSocket(SERVER_PORT)) {
             System.out.println("Server started.");
             socket = serverSocket.accept();
@@ -19,12 +20,13 @@ public class EchoServer {
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
             while (true) {
                 String str = in.readUTF();
-                System.out.println("Message: " + str);
                 if (str.equals("/end")) {
                     in.close();
                     out.close();
+                    socket.close();
                     break;
                 }
+                System.out.println("Message: " + str);
                 out.writeUTF("Echo: " + str);
             }
             System.out.println("Client disconnected.");
