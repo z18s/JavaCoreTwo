@@ -1,0 +1,29 @@
+#contactsListView .list-cell {
+    -fx-background-color: #F5F5F5;
+}
+
+#contactsListView .list-cell:selected {
+    -fx-font-weight: bold;
+}
+
+#messagesListView .list-cell {
+    -fx-background-color: #FFF;
+}
+
+#messageText {
+    -fx-background-radius: 0;
+    -fx-faint-focus-color: transparent;
+    -fx-focus-color: #C0C0C0;
+}
+
+#loginText, #passwordText {
+    -fx-background-radius: 0;
+    -fx-faint-focus-color: transparent;
+    -fx-focus-color: #C0C0C0;
+}
+
+.button {
+    -fx-font-weight: bold;
+    -fx-background-radius: 0;
+    -fx-base: #C0C0C0;
+}
