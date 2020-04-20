@@ -33,7 +33,7 @@ public class AuthController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        new AppController();
     }
 
     @FXML

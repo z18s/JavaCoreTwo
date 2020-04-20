@@ -10,8 +10,8 @@ public class AppScene extends Scene {
     public static int WIDTH;
     public static int HEIGHT;
 
-    public AppScene(Parent root, int w, int h) {
-        super(root, w, h);
+    public AppScene(Parent root) {
+        super(root, WIDTH, HEIGHT);
         this.getStylesheets().add(getClass().getResource("/view/styles.css").toExternalForm());
     }
 }

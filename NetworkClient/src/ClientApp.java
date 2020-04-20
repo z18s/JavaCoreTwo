@@ -1,8 +1,4 @@
-import controller.AppController;
-import controller.AuthController;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.stage.Stage;
 import view.AppScene;
 import view.AuthWindow;
