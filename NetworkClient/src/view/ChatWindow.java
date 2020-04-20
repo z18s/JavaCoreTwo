@@ -1,33 +1,35 @@
 package view;
 
+import controller.AppController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
 import java.io.IOException;
 
 public class ChatWindow {
-    private FXMLLoader chatFxml;
+    private final AppScene scene;
+    private final AppController controller;
+
     private String nickname;
 
     public ChatWindow() throws IOException {
-        chatFxml = new FXMLLoader(getClass().getResource("chat.fxml"));
+        FXMLLoader chatFxml = new FXMLLoader(getClass().getResource("/view/chat.fxml"));
         Parent chat = chatFxml.load();
-        AppScene chatScene = new AppScene(chat);
+        scene = new AppScene(chat);
+        controller = chatFxml.getController();
+    }
 
-        AppScene.stage.setScene(chatScene);
+    public void init() {
+        AppScene.stage.setScene(scene);
         AppScene.stage.setTitle("MyChat - " + nickname);
         AppScene.stage.show();
     }
 
-//    public ChatWindow(Stage stage, int w, int h) throws IOException {
-//        Parent chat = FXMLLoader.load(getClass().getResource("chat.fxml"));
-//        AppScene chatScene = new AppScene(chat, w, h);
-//        stage.setScene(chatScene);
-//        stage.setTitle("MyChat - " + nickname);
-//        stage.show();
-//    }
-
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public AppController getController() {
+        return controller;
     }
 }

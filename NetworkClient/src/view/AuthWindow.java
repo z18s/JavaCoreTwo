@@ -1,28 +1,29 @@
 package view;
 
+import controller.AppController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
 import java.io.IOException;
 
 public class AuthWindow {
-    private FXMLLoader authFxml;
+    private final AppScene scene;
+    private final AppController controller;
 
     public AuthWindow() throws IOException {
-        authFxml = new FXMLLoader(getClass().getResource("auth.fxml"));
+        FXMLLoader authFxml = new FXMLLoader(getClass().getResource("/view/auth.fxml"));
         Parent auth = authFxml.load();
-        AppScene authScene = new AppScene(auth);
+        scene = new AppScene(auth);
+        controller = authFxml.getController();
+    }
 
-        AppScene.stage.setScene(authScene);
+    public void init() {
+        AppScene.stage.setScene(scene);
         AppScene.stage.setTitle("MyChat - Authentication");
         AppScene.stage.show();
     }
 
-//    public AuthWindow(Stage stage, int w, int h) throws IOException {
-//        Parent auth = FXMLLoader.load(getClass().getResource("auth.fxml"));
-//        AppScene authScene = new AppScene(auth, w, h);
-//        stage.setScene(authScene);
-//        stage.setTitle("MyChat - Authentication");
-//        stage.show();
-//    }
+    public AppController getController() {
+        return controller;
+    }
 }

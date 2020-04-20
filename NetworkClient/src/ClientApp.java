@@ -17,8 +17,8 @@ public class ClientApp extends Application {
         AppScene.HEIGHT = HEIGHT;
 
         try {
-            new AuthWindow();
-            //new AuthWindow(primaryStage, WIDTH, HEIGHT);
+            AuthWindow authWindow = new AuthWindow();
+            authWindow.init();
         } catch (IOException e) {
             System.out.println("Auth Window failed.");
             e.printStackTrace();

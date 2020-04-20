@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -13,9 +14,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ChatController implements Initializable {
+public class ChatController extends AppController implements Initializable {
 
-    private final NetworkService networkService;
+    public static NetworkService networkService = AuthController.networkService;
 
     @FXML
     ListView<String> contactsList;
@@ -25,10 +26,6 @@ public class ChatController implements Initializable {
 
     @FXML
     TextField messageText;
-
-    public ChatController(NetworkService networkService) {
-        this.networkService = networkService;
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -48,19 +45,6 @@ public class ChatController implements Initializable {
         }
     }
 
-    @FXML
-    private void aboutWindow(ActionEvent actionEvent) {
-        AppController.aboutWindow(actionEvent);
-    }
-
-    @FXML
-    private void exit(ActionEvent actionEvent) {
-        AppController.exit();
-    }
-//    public void selectContact(MouseEvent mouseEvent) {
-//        partnerName = contactsList.getSelectionModel().getSelectedItem();
-//    }
-
     private void sendMessage() {
         String message = messageText.getText();
         if (!message.isBlank()) {
@@ -74,25 +58,21 @@ public class ChatController implements Initializable {
         try {
             networkService.sendMessage(message);
         } catch (IOException e) {
-            AppController.errorWindow("Failed to send message!");
+            errorWindow("Failed to send message!");
             e.printStackTrace();
         }
     }
 
     public void printAnswer(String strFromServer) {
-        messagesList.getItems().add(strFromServer);
+        Platform.runLater(() -> messagesList.getItems().add(strFromServer));
+
     }
 
     private void printOwnMessage(String message) {
-        messagesList.getItems().add("Me: " + message);
+        Platform.runLater(() -> messagesList.getItems().add("Me: " + message));
     }
 
-//    public void chatInit() {
-//        contactsListInit();
-//        messageText.requestFocus();
-//    }
-
     private void contactsListInit() {
-        contactsList.getItems().addAll("User1", "User2", "User3");
+        Platform.runLater(() -> contactsList.getItems().addAll("User1", "User2", "User3"));
     }
 }

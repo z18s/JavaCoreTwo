@@ -42,13 +42,9 @@ public class NetworkService {
             while (true) {
                 try {
                     String message = in.readUTF();
-                    //TODO delete
-                    System.out.println("in.readUTF: " + message);
-                    //*
                     if (message.startsWith(AUTH_SUCCESSFUL_CMD)) {
                         String[] messageParts = message.split("\\s+", 2);
                         nickname = messageParts[1];
-                        AppController.authOk = true;
                         successfulAuthEvent.authIsSuccessful(nickname);
                     }
                     else if (messageHandler != null) {
@@ -65,16 +61,10 @@ public class NetworkService {
     }
 
     public void sendAuthMessage(String login, String password) throws IOException {
-        //TODO delete
-        System.out.println(String.format("out.writeUTF auth: %s %s %s", AUTH_CMD, login, password));
-        //*
         out.writeUTF(String.format("%s %s %s", AUTH_CMD, login, password));
     }
 
     public void sendMessage(String message) throws IOException {
-        //TODO delete
-        System.out.println("out.writeUTF: " + message);
-        //*
         out.writeUTF(message);
     }
 
