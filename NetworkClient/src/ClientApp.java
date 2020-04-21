@@ -7,14 +7,19 @@ import java.io.IOException;
 
 public class ClientApp extends Application {
 
-    private final int WIDTH = 600;
-    private final int HEIGHT = 400;
+    @Override
+    public void init() {
+        int WIDTH = 600;
+        int HEIGHT = 400;
+
+        AppScene.WIDTH = WIDTH;
+        AppScene.HEIGHT = HEIGHT;
+    }
 
     @Override
     public void start(Stage primaryStage) {
+
         AppScene.stage = primaryStage;
-        AppScene.WIDTH = WIDTH;
-        AppScene.HEIGHT = HEIGHT;
 
         try {
             AuthWindow authWindow = new AuthWindow();

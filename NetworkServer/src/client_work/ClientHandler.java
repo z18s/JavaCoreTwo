@@ -55,38 +55,35 @@ public class ClientHandler {
     private void readMessages() throws IOException {
         while (true) {
             String message = inputStream.readUTF();
-            //TODO delete
-            System.out.println("inputStream readMes: " + message);
-            //*
+
             if (message.startsWith(END_CMD)) {
                 return;
+            } else if (message.startsWith(PRIVATE_MESSAGE_CMD)) {
+                String[] msg = message.split("\\s+", 3);
+                String messageAddress = msg[1];
+                String messageText = msg[2];
+                serverInstance.sendPrivateMessage(messageAddress, String.format("%s: %s", nickname, messageText));
+            } else {
+                serverInstance.broadcastMessage(String.format("%s: %s", nickname, message));
             }
-            //TODO delete
-            System.out.println(String.format("%s: %s", nickname, message));
-            //*
-            serverInstance.broadcastMessage(String.format("%s: %s", nickname, message));
         }
     }
 
     private void authentication() throws IOException {
         while (true) {
             String message = inputStream.readUTF();
-            //TODO delete
-            System.out.println("inputStream auth: " + message);
-            //*
+
             if (message.startsWith(AUTH_CMD)) {
-                String[] parts = message.split("\\s+");
-                String login = parts[1];
-                String password = parts[2];
+                String[] msg = message.split("\\s+");
+                String login = msg[1];
+                String password = msg[2];
 
                 String nickname = authService.getNickByLoginAndPassword(login, password);
                 if (nickname == null) {
                     sendMessage("Неверные логин/пароль!");
-                }
-                else if (serverInstance.isNicknameBusy(nickname)) {
+                } else if (serverInstance.isNicknameBusy(nickname)) {
                     sendMessage("Учётная запись уже используется!");
-                }
-                else {
+                } else {
                     sendMessage(String.format("%s %s", AUTH_SUCCESSFUL_CMD, nickname));
                     setNickname(nickname);
                     serverInstance.broadcastMessage(nickname + " зашёл в чат!");
@@ -106,9 +103,6 @@ public class ClientHandler {
     }
 
     public void sendMessage(String message) throws IOException {
-        //TODO delete
-        System.out.println("sendMessage: " + message);
-        //*
         outputStream.writeUTF(message);
     }
 }

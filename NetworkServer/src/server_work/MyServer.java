@@ -76,4 +76,13 @@ public class MyServer {
     public synchronized void unsubscribe(ClientHandler clientHandler) {
         clients.remove(clientHandler);
     }
+
+    public synchronized void sendPrivateMessage(String nickname, String message) throws IOException {
+        for (ClientHandler client : clients) {
+            if (client.getNickname().equals(nickname)) {
+                client.sendMessage(message);
+                return;
+            }
+        }
+    }
 }

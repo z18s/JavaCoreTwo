@@ -15,7 +15,7 @@
         </Menu>
     </MenuBar>
     <HBox VBox.vgrow="ALWAYS">
-        <ListView fx:id="contactsList" id="contactsListView" focusTraversable="false" maxWidth="150"/>
+        <ListView fx:id="contactsList" id="contactsListView" focusTraversable="false" maxWidth="150" onMouseClicked="#selectContact"/>
         <VBox HBox.hgrow="ALWAYS">
             <ListView fx:id="messagesList" id="messagesListView" focusTraversable="false" VBox.vgrow="ALWAYS"/>
             <HBox>

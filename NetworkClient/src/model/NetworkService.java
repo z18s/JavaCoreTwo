@@ -68,6 +68,10 @@ public class NetworkService {
         out.writeUTF(message);
     }
 
+    public void sendPrivateMessage(String nickname, String message) throws IOException {
+        out.writeUTF(String.format("%s %s %s", PRIVATE_MESSAGE_CMD, nickname, message));
+    }
+
     public void setMessageHandler(Consumer<String> messageHandler) {
         this.messageHandler = messageHandler;
     }

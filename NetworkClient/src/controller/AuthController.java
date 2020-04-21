@@ -21,13 +21,8 @@ public class AuthController extends AppController implements Initializable {
     public static NetworkService networkService;
 
     private ChatWindow chatWindow;
-
     private String nickname;
-
     private volatile boolean chatPainted;
-
-    private final String HOST = "localhost";
-    private final int PORT = 8189;
 
     @FXML
     TextField loginText;
@@ -40,6 +35,9 @@ public class AuthController extends AppController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        String HOST = "localhost";
+        int PORT = 8189;
+
         networkService = new NetworkService(HOST, PORT, this);
 
         try {
