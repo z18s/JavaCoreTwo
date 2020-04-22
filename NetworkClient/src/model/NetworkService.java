@@ -6,7 +6,6 @@ import command.MessageCommand;
 import command.UpdateUsersListCommand;
 import controller.AppController;
 import controller.AuthEvent;
-import controller.ChatController;
 import logic.Command;
 import view.ChatWindow;
 
@@ -49,7 +48,7 @@ public class NetworkService {
                     Command command = (Command) in.readObject();
                     processCommand(command);
                 } catch (IOException e) {
-                    System.err.println("Поток чтения был прерван!");
+                    System.err.println("Read thread has been interrupted!");
                     return;
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
