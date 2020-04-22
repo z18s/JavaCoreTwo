@@ -99,7 +99,10 @@ public class ChatController extends AppController implements Initializable {
     }
 
     private void printOwnMessage(String message) {
-        Platform.runLater(() -> messagesList.getItems().add("Me: " + message));
+        Platform.runLater(() -> messagesList.getItems().add(
+                String.format("Me%s: %s", (receiver.equals("") ? "" : (" -> " + receiver)), message)
+                )
+        );
     }
 
     @Override
@@ -112,9 +115,6 @@ public class ChatController extends AppController implements Initializable {
         Platform.runLater(() -> {
             contactsList.getItems().clear();
             contactsList.getItems().addAll(users);
-//            for (String user : users) {
-//                contactsList.getItems().add(user);
-//            }
         });
     }
 }
