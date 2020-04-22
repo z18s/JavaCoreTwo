@@ -80,6 +80,16 @@ public class ClientHandler {
     }
 
     private void authentication() throws IOException {
+        Thread threadTimeOut = new Thread(() -> {
+            try {
+                Thread.sleep(120_000);
+                closeConnection();
+            } catch (InterruptedException e) {
+                System.out.println("Connection has been handled.");
+            }
+        }, "Authentication Time Out Thread");
+        threadTimeOut.start();
+
         while (true) {
             Command command = readCommand();
             if (command == null) {
@@ -88,6 +98,7 @@ public class ClientHandler {
             switch (command.getType()) {
                 case AUTH: {
                     if (processAuthCommand(command)) {
+                        threadTimeOut.interrupt();
                         return;
                     }
                     break;
