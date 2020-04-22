@@ -38,11 +38,7 @@ public class AuthController extends AppController implements Initializable {
 
         networkService = new NetworkService(HOST, PORT, this);
 
-        try {
-            runApplication();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        runApplication();
     }
 
     @FXML
@@ -75,17 +71,16 @@ public class AuthController extends AppController implements Initializable {
         sendAuthMessage(login, password);
     }
 
-    private void runApplication() throws IOException {
+    private void runApplication() {
         connectToServer();
         runAuthProcess();
     }
 
-    private void connectToServer() throws IOException {
+    private void connectToServer() {
         try {
             networkService.connect();
         } catch (IOException e) {
             System.err.println("Failed to establish server connection.");
-            throw e;
         }
     }
 
@@ -100,6 +95,8 @@ public class AuthController extends AppController implements Initializable {
         Platform.runLater(() -> paintChat());
 
         while (!chatPainted) Thread.onSpinWait();
+
+        networkService.setChatWindow(chatWindow);
 
         chatWindow.setNickname(nickname);
         networkService.setMessageHandler(((ChatController)chatWindow.getController())::printAnswer);

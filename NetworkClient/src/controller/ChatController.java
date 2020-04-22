@@ -30,7 +30,6 @@ public class ChatController extends AppController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        //contactsListInit();
         messageText.requestFocus();
     }
 
@@ -64,7 +63,7 @@ public class ChatController extends AppController implements Initializable {
         String message = messageText.getText();
         if (!message.isBlank()) {
             sendMessage(receiver, message);
-            //printOwnMessage(message);
+            printOwnMessage(message);
             messageText.clear();
         }
     }
@@ -85,29 +84,37 @@ public class ChatController extends AppController implements Initializable {
         sendCommand(Command.privateMessageCommand(username, message));
     }
 
-    public void printAnswer(String strFromServer) {
-        Platform.runLater(() -> messagesList.getItems().add(strFromServer));
-
+    public boolean isOwnMessage(String strFromServer) {
+        if (strFromServer == null || strFromServer.length() == 0) {
+            return false;
+        }
+        String[] messageParts = strFromServer.split(":", 2);
+        return messageParts[0].equals(nickname);
     }
 
-//    private void printOwnMessage(String message) {
-//        Platform.runLater(() -> messagesList.getItems().add("Me: " + message));
-//    }
+    public void printAnswer(String strFromServer) {
+        if (!isOwnMessage(strFromServer)) {
+            Platform.runLater(() -> messagesList.getItems().add(strFromServer));
+        }
+    }
 
+    private void printOwnMessage(String message) {
+        Platform.runLater(() -> messagesList.getItems().add("Me: " + message));
+    }
+
+    @Override
     public void updateUsersList(List<String> users) {
         users.remove(nickname);
         contactsListUpdate(users);
     }
 
-//    private void contactsListInit() {
-//        Platform.runLater(() -> contactsList.getItems().addAll("nickname1", "nickname2", "nickname3"));
-//    }
-
     private void contactsListUpdate(List<String> users) {
         Platform.runLater(() -> {
-            for (String user : users) {
-                contactsList.getItems().add(user);
-            }
+            contactsList.getItems().clear();
+            contactsList.getItems().addAll(users);
+//            for (String user : users) {
+//                contactsList.getItems().add(user);
+//            }
         });
     }
 }

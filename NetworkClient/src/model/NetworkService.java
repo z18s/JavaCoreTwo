@@ -8,6 +8,7 @@ import controller.AppController;
 import controller.AuthEvent;
 import controller.ChatController;
 import logic.Command;
+import view.ChatWindow;
 
 import java.io.*;
 import java.net.Socket;
@@ -26,6 +27,8 @@ public class NetworkService {
     private Consumer<String> messageHandler;
     private AuthEvent successfulAuthEvent;
 
+    private ChatWindow chatWindow;
+
     public NetworkService(String host, int port, AppController controller) {
         this.host = host;
         this.port = port;
@@ -34,8 +37,8 @@ public class NetworkService {
 
     public void connect() throws IOException {
         socket = new Socket(host, port);
-        in = new ObjectInputStream(socket.getInputStream());
         out = new ObjectOutputStream(socket.getOutputStream());
+        in = new ObjectInputStream(socket.getInputStream());
         receiveMessageThread();
     }
 
@@ -46,7 +49,7 @@ public class NetworkService {
                     Command command = (Command) in.readObject();
                     processCommand(command);
                 } catch (IOException e) {
-                    System.out.println("Поток чтения был прерван!");
+                    System.err.println("Поток чтения был прерван!");
                     return;
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
@@ -74,7 +77,7 @@ public class NetworkService {
             case UPDATE_USERS_LIST: {
                 UpdateUsersListCommand data = (UpdateUsersListCommand) command.getData();
                 List<String> users = data.getUsers();
-                ((ChatController) controller).updateUsersList(users);
+                chatWindow.getController().updateUsersList(users);
                 break;
             }
             default:
@@ -116,6 +119,10 @@ public class NetworkService {
 
     public void setSuccessfulAuthEvent(AuthEvent successfulAuthEvent) {
         this.successfulAuthEvent = successfulAuthEvent;
+    }
+
+    public void setChatWindow(ChatWindow chatWindow) {
+        this.chatWindow = chatWindow;
     }
 
     public void close() {
