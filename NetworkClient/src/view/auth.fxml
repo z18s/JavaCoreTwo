@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controller.AuthController" alignment="CENTER">
+    <MenuBar>
+        <Menu text="File">
+            <MenuItem text="Exit" onAction="#exit"/>
+        </Menu>
+        <Menu text="Help">
+            <MenuItem text="About" onAction="#aboutWindow"/>
+        </Menu>
+    </MenuBar>
+    <HBox VBox.vgrow="ALWAYS"/>
+    <HBox alignment="CENTER">
+        <Label text="Login:" prefWidth="100"/>
+        <TextField fx:id="loginText" maxWidth="200" onKeyPressed="#switchToPasswordFieldWithEnter"/>
+    </HBox>
+    <HBox alignment="CENTER">
+        <Label text="Password:" prefWidth="100"/>
+        <PasswordField fx:id="passwordText" maxWidth="200" onKeyPressed="#authenticationWithEnter"/>
+    </HBox>
+    <Label fx:id="loginStatus"/>
+    <Button id="sendButton" focusTraversable="false" onAction="#authenticationWithButton" text="Log in"/>
+    <HBox VBox.vgrow="ALWAYS"/>
+</VBox>

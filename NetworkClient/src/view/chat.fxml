@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controller.ChatController" alignment="CENTER">
+    <MenuBar>
+        <Menu text="File">
+            <MenuItem text="Exit" onAction="#exit"/>
+        </Menu>
+        <Menu text="Help">
+            <MenuItem text="About" onAction="#aboutWindow"/>
+        </Menu>
+    </MenuBar>
+    <HBox VBox.vgrow="ALWAYS">
+        <ListView fx:id="contactsList" id="contactsListView" focusTraversable="false" maxWidth="150" onMouseClicked="#selectContact"/>
+        <VBox HBox.hgrow="ALWAYS">
+            <ListView fx:id="messagesList" id="messagesListView" focusTraversable="false" VBox.vgrow="ALWAYS"/>
+            <HBox>
+                <TextField fx:id="messageText" HBox.hgrow="ALWAYS" onKeyPressed="#sendMessageWithEnter"/>
+                <Button text=">>>" id="sendButton" focusTraversable="false" onAction="#sendMessageWithButton"/>
+            </HBox>
+        </VBox>
+    </HBox>
+</VBox>
