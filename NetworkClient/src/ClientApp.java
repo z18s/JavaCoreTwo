@@ -25,7 +25,7 @@ public class ClientApp extends Application {
             AuthWindow authWindow = new AuthWindow();
             authWindow.init();
         } catch (IOException e) {
-            System.out.println("Auth Window failed.");
+            System.err.println("Auth Window failed.");
             e.printStackTrace();
         }
     }

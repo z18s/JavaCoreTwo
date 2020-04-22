@@ -9,6 +9,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import logic.Command;
 import model.NetworkService;
 import view.ChatWindow;
 
@@ -18,10 +19,7 @@ import java.util.ResourceBundle;
 
 public class AuthController extends AppController implements Initializable {
 
-    public static NetworkService networkService;
-
     private ChatWindow chatWindow;
-    private String nickname;
     private volatile boolean chatPainted;
 
     @FXML
@@ -66,19 +64,15 @@ public class AuthController extends AppController implements Initializable {
         }
     }
 
-    public void sendAuthMessage(String login, String pass) throws IOException {
-        networkService.sendAuthMessage(login, pass);
+    public void sendAuthMessage(String login, String pass) {
+        sendCommand(Command.authCommand(login, pass));
     }
 
     private void authentication() {
         String login = loginText.getText();
         String password = passwordText.getText();
         loginStatus.setText("Checking...");
-        try {
-            sendAuthMessage(login, password);
-        } catch (IOException e) {
-            errorWindow("Authentication error!");
-        }
+        sendAuthMessage(login, password);
     }
 
     private void runApplication() throws IOException {
@@ -107,7 +101,7 @@ public class AuthController extends AppController implements Initializable {
 
         while (!chatPainted) Thread.onSpinWait();
 
-        chatWindow.setNickname(getUsername());
+        chatWindow.setNickname(nickname);
         networkService.setMessageHandler(((ChatController)chatWindow.getController())::printAnswer);
 
         Platform.runLater(() -> chatWindow.init());
@@ -117,18 +111,14 @@ public class AuthController extends AppController implements Initializable {
         try {
             chatWindow = new ChatWindow();
         } catch (IOException e) {
-            System.out.println("Chat Window failed.");
+            System.err.println("Chat Window failed.");
             e.printStackTrace();
         }
         chatPainted = true;
     }
 
     private void setUserName(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getUsername() {
-        return nickname;
+        AppController.nickname = nickname;
     }
 
     public void shutdown() {
