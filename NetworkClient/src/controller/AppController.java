@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import logic.Command;
 import model.NetworkService;
+import view.AppScene;
 
 import java.io.IOException;
 import java.util.List;
@@ -27,16 +28,16 @@ public abstract class AppController {
     }
 
     public void errorWindow(String errorText) {
-        //if (AppScene.stage.isShowing()) {
-        Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.ERROR, errorText);
-            alert.setTitle("Error");
-            alert.setHeaderText(null);
-            alert.show();
-        });
-        //} else {
-        System.err.println(errorText);
-        //}
+        if (AppScene.stage.isShowing()) {
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR, errorText);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.show();
+            });
+        } else {
+            System.err.println(errorText);
+        }
     }
 
     @FXML
