@@ -1,15 +1,18 @@
 package model;
 
+import command.AuthCommand;
+import command.ErrorCommand;
+import command.MessageCommand;
+import command.UpdateUsersListCommand;
 import controller.AppController;
 import controller.AuthEvent;
+import logic.Command;
+import view.ChatWindow;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
+import java.util.List;
 import java.util.function.Consumer;
-
-import static server_work.MessageConstant.*;
 
 public class NetworkService {
 
@@ -17,12 +20,13 @@ public class NetworkService {
     private final int port;
     private final AppController controller;
     private Socket socket;
-    private DataInputStream in;
-    private DataOutputStream out;
+    private ObjectInputStream in;
+    private ObjectOutputStream out;
 
     private Consumer<String> messageHandler;
     private AuthEvent successfulAuthEvent;
-    private String nickname;
+
+    private ChatWindow chatWindow;
 
     public NetworkService(String host, int port, AppController controller) {
         this.host = host;
@@ -32,8 +36,8 @@ public class NetworkService {
 
     public void connect() throws IOException {
         socket = new Socket(host, port);
-        in = new DataInputStream(socket.getInputStream());
-        out = new DataOutputStream(socket.getOutputStream());
+        out = new ObjectOutputStream(socket.getOutputStream());
+        in = new ObjectInputStream(socket.getInputStream());
         receiveMessageThread();
     }
 
@@ -41,35 +45,71 @@ public class NetworkService {
         new Thread(() -> {
             while (true) {
                 try {
-                    String message = in.readUTF();
-                    if (message.startsWith(AUTH_SUCCESSFUL_CMD)) {
-                        String[] messageParts = message.split("\\s+", 2);
-                        nickname = messageParts[1];
-                        successfulAuthEvent.authIsSuccessful(nickname);
-                    }
-                    else if (messageHandler != null) {
-                        messageHandler.accept(message);
-                    } else {
-                        controller.errorWindow(message);
-                    }
+                    Command command = (Command) in.readObject();
+                    processCommand(command);
                 } catch (IOException e) {
-                    System.out.println("Read thread has been interrupted!");
+                    System.err.println("Read thread has been interrupted!");
                     return;
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                    System.err.println("Read thread has been interrupted!");
                 }
             }
         }, "Read Thread").start();
     }
 
-    public void sendAuthMessage(String login, String password) throws IOException {
-        out.writeUTF(String.format("%s %s %s", AUTH_CMD, login, password));
+    private void processCommand(Command command) {
+        switch (command.getType()) {
+            case AUTH: {
+                processAuthCommand(command);
+                break;
+            }
+            case MESSAGE: {
+                processMessageCommand(command);
+                break;
+            }
+            case AUTH_ERROR:
+            case ERROR: {
+                processErrorCommand(command);
+                break;
+            }
+            case UPDATE_USERS_LIST: {
+                UpdateUsersListCommand data = (UpdateUsersListCommand) command.getData();
+                List<String> users = data.getUsers();
+                chatWindow.getController().updateUsersList(users);
+                break;
+            }
+            default:
+                System.err.println("Unknown type of command: " + command.getType());
+
+        }
     }
 
-    public void sendMessage(String message) throws IOException {
-        out.writeUTF(message);
+    private void processErrorCommand(Command command) {
+        ErrorCommand data = (ErrorCommand) command.getData();
+        controller.errorWindow(data.getErrorMessage());
     }
 
-    public void sendPrivateMessage(String nickname, String message) throws IOException {
-        out.writeUTF(String.format("%s %s %s", PRIVATE_MESSAGE_CMD, nickname, message));
+    private void processMessageCommand(Command command) {
+        MessageCommand data = (MessageCommand) command.getData();
+        if (messageHandler != null) {
+            String message = data.getMessage();
+            String username = data.getUsername();
+            if (username != null) {
+                message = username + ": " + message;
+            }
+            messageHandler.accept(message);
+        }
+    }
+
+    private void processAuthCommand(Command command) {
+        AuthCommand data = (AuthCommand) command.getData();
+        String nickname = data.getUsername();
+        successfulAuthEvent.authIsSuccessful(nickname);
+    }
+
+    public void sendCommand(Command command) throws IOException {
+        out.writeObject(command);
     }
 
     public void setMessageHandler(Consumer<String> messageHandler) {
@@ -80,8 +120,13 @@ public class NetworkService {
         this.successfulAuthEvent = successfulAuthEvent;
     }
 
+    public void setChatWindow(ChatWindow chatWindow) {
+        this.chatWindow = chatWindow;
+    }
+
     public void close() {
         try {
+            sendCommand(Command.endCommand());
             socket.close();
         } catch (IOException e) {
             e.printStackTrace();

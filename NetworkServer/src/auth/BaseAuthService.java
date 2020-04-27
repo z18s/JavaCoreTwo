@@ -29,7 +29,7 @@ public class BaseAuthService implements AuthService {
         }
     }
 
-    private static final Map<AuthEntry, String> NICKNAME_BY_LOGIN_AND_PASS =Map.of(
+    private static final Map<AuthEntry, String> NICKNAME_BY_LOGIN_AND_PASS = Map.of(
             new AuthEntry("login1", "pass1"), "nickname1",
             new AuthEntry("login2", "pass2"), "nickname2",
             new AuthEntry("login3", "pass3"), "nickname3"

@@ -3,6 +3,7 @@ package server_work;
 import auth.AuthService;
 import auth.BaseAuthService;
 import client_work.ClientHandler;
+import logic.Command;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -63,24 +64,36 @@ public class MyServer {
         return false;
     }
 
-    public synchronized void broadcastMessage(String message) throws IOException {
+    public synchronized void broadcastMessage(Command command) throws IOException {
         for (ClientHandler client : clients) {
-            client.sendMessage(message);
+            client.sendMessage(command);
         }
     }
 
-    public synchronized void subscribe(ClientHandler clientHandler) {
+    public synchronized void subscribe(ClientHandler clientHandler) throws IOException {
         clients.add(clientHandler);
+        List<String> users = getAllUsernames();
+        broadcastMessage(Command.updateUsersListCommand(users));
     }
 
-    public synchronized void unsubscribe(ClientHandler clientHandler) {
+    public synchronized void unsubscribe(ClientHandler clientHandler) throws IOException {
         clients.remove(clientHandler);
+        List<String> users = getAllUsernames();
+        broadcastMessage(Command.updateUsersListCommand(users));
     }
 
-    public synchronized void sendPrivateMessage(String nickname, String message) throws IOException {
+    private List<String> getAllUsernames() {
+        List<String> result = new ArrayList<>();
         for (ClientHandler client : clients) {
-            if (client.getNickname().equals(nickname)) {
-                client.sendMessage(message);
+            result.add(client.getNickname());
+        }
+        return result;
+    }
+
+    public synchronized void sendPrivateMessage(String receiver, Command command) throws IOException {
+        for (ClientHandler client : clients) {
+            if (client.getNickname().equals(receiver)) {
+                client.sendMessage(command);
                 return;
             }
         }
